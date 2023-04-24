@@ -1,0 +1,38 @@
+{
+  "folders": [
+    {
+      "name": "Protobuf",
+      "path": ".."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/cov_provile": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true,
+      "**/cov_provile": true,
+      "**/*.lcov": true
+    },
+    "deno.enable": true,
+    "deno.lint": true,
+    "[typescript]": {},
+    "deno.inlayHints.enumMemberValues.enabled": true,
+    "deno.inlayHints.parameterTypes.enabled": true,
+    "deno.inlayHints.propertyDeclarationTypes.enabled": true,
+    "deno.inlayHints.variableTypes.enabled": true,
+    "deno.inlayHints.variableTypes.suppressWhenTypeMatchesName": false,
+    "deno.inlayHints.parameterNames.enabled": "all",
+    "deno.inlayHints.functionLikeReturnTypes.enabled": true,
+    "deno.codeLens.test": true,
+    "cSpell.words": ["VARINT"]
+  }
+}
