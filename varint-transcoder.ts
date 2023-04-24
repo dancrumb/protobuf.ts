@@ -48,7 +48,7 @@ function decoder(varint: Uint8Array) {
   }
 }
 
-export const littleEndianToVarint = (littleEndian: Uint8Array): Uint8Array => {
+export function littleEndianToVarint(littleEndian: Uint8Array): Uint8Array {
   const bytes = encoder(littleEndian);
   let byte;
   const result: number[] = [];
@@ -58,10 +58,11 @@ export const littleEndianToVarint = (littleEndian: Uint8Array): Uint8Array => {
   } while (!byte.done);
 
   return Uint8Array.from(result);
-};
+}
 
-export const varintToLittleEndian = (
-  varint: Uint8Array
-): { value: Uint8Array; bytesRead: number } => {
+export function varintToLittleEndian(varint: Uint8Array): {
+  value: Uint8Array;
+  bytesRead: number;
+} {
   return decoder(varint);
-};
+}

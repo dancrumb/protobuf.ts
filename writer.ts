@@ -15,17 +15,25 @@ function appendBuffer(buffer1: Uint8Array, buffer2: Uint8Array) {
   return tmp;
 }
 
-/** Wire format writer using `Uint8Array` */
+/**
+ * Protocol Buffer wire format writer.
+ *
+ * Generates a Uint8Array that can then be sent over the wire (or stored in a file)
+ */
 export class Writer {
   private buffer: Uint8Array;
   private stack: Uint8Array[] = [];
 
-  /** Constructs a new writer instance. */
-  constructor() {
+  /**
+   * @private
+   */
+  private constructor() {
     this.buffer = new Uint8Array();
   }
 
-  /** Current length. */
+  /**
+   * Current length of buffer
+   */
   public get len(): number {
     return this.buffer.length;
   }
@@ -105,7 +113,7 @@ export class Writer {
   }
 
   /**
-   * Writes a boolish value as a varint.
+   * Writes a boolean value as a varint.
    * @param value Value to write
    * @returns `this`
    */
@@ -222,7 +230,7 @@ export class Writer {
     return this;
   }
 
-  private pop() {
+  private pop(): Uint8Array {
     const previous = this.stack.pop();
     if (previous === undefined) {
       throw new Error("Reset Protobuf writer, but there's nothing to reset to");

@@ -1,10 +1,10 @@
 import { Long } from "./deps.ts";
 
-export const swapEndianness = (num: Uint8Array): Uint8Array => {
+export function swapEndianness(num: Uint8Array): Uint8Array {
   return num.reverse();
-};
+}
 
-export const removeExtraneousZeroes = (le: number[]): number[] => {
+export function removeExtraneousZeroes(le: number[]): number[] {
   if (le.length <= 1) {
     return le;
   }
@@ -12,20 +12,20 @@ export const removeExtraneousZeroes = (le: number[]): number[] => {
   return msbs.every((b) => b === 0)
     ? removeExtraneousZeroes(le.slice(0, le.length / 2))
     : le;
-};
+}
 
-export const numberToBigEndian = (num: number | Long | string) => {
+export function numberToBigEndian(num: number | Long | string): Uint8Array {
   return numberToLittleEndian(num).reverse();
-};
+}
 
-export const numberToLittleEndian = (
+export function numberToLittleEndian(
   num: number | Long | string,
   width = 0
-) => {
+): Uint8Array {
   const bytes = Long.fromValue(num).toBytesLE();
   if (width === 0) {
     return new Uint8Array(removeExtraneousZeroes(bytes));
   }
   bytes.length = width;
   return new Uint8Array(Array.from(bytes, (b) => b ?? 0));
-};
+}
