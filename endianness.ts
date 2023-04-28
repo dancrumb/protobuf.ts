@@ -5,13 +5,14 @@ export function swapEndianness(num: Uint8Array): Uint8Array {
 }
 
 export function removeExtraneousZeroes(le: number[]): number[] {
-  if (le.length <= 1) {
-    return le;
+  const result = [...le];
+  while (result[result.length - 1] === 0) {
+    result.length--;
   }
-  const msbs = le.slice(le.length / 2);
-  return msbs.every((b) => b === 0)
-    ? removeExtraneousZeroes(le.slice(0, le.length / 2))
-    : le;
+  if (result.length === 0) {
+    return [0];
+  }
+  return result;
 }
 
 export function numberToBigEndian(num: number | Long | string): Uint8Array {

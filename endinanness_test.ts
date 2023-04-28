@@ -29,12 +29,12 @@ Deno.test("handles 0xFFF", () => {
 
 Deno.test("handles 0x1FFFF", () => {
   const numberArray = numberToBigEndian(0x1ffff);
-  assertUint8ArraysEqual(numberArray, new Uint8Array([0x00, 0x01, 0xff, 0xff]));
+  assertUint8ArraysEqual(numberArray, new Uint8Array([0x01, 0xff, 0xff]));
 });
 
 Deno.test("handles 0x123456", () => {
   const numberArray = numberToBigEndian(0x123456);
-  assertUint8ArraysEqual(numberArray, new Uint8Array([0x00, 0x12, 0x34, 0x56]));
+  assertUint8ArraysEqual(numberArray, new Uint8Array([0x12, 0x34, 0x56]));
 });
 
 Deno.test("handles 0xCAAC", () => {
@@ -47,12 +47,17 @@ Deno.test("handles 150", () => {
   assertUint8ArraysEqual(numberArray, new Uint8Array([150]));
 });
 
-Deno.test("removeExtraneousZeroes: 0", () => {
-  assertUint8ArraysEqual(removeExtraneousZeroes([1]), [1]);
-});
-Deno.test("removeExtraneousZeroes: 0x0100", () => {
-  assertUint8ArraysEqual(removeExtraneousZeroes([0x01, 0x00]), [0x01]);
-});
-Deno.test("removeExtraneousZeroes: 0x0102", () => {
-  assertUint8ArraysEqual(removeExtraneousZeroes([0x01, 0x02]), [0x01, 0x02]);
+Deno.test("removeExtraneousZeroes", async (t) => {
+  await t.step("0", () => {
+    assertUint8ArraysEqual(removeExtraneousZeroes([1]), [1]);
+  });
+  await t.step("0x0100", () => {
+    assertUint8ArraysEqual(removeExtraneousZeroes([0x00, 0x01]), [0x00, 0x01]);
+  });
+  await t.step("0x0001", () => {
+    assertUint8ArraysEqual(removeExtraneousZeroes([0x01, 0x00]), [0x01]);
+  });
+  await t.step("0x0102", () => {
+    assertUint8ArraysEqual(removeExtraneousZeroes([0x01, 0x02]), [0x01, 0x02]);
+  });
 });

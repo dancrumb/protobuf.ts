@@ -1,11 +1,11 @@
 import { littleEndianToVarint } from "./varint-transcoder.ts";
 import { Long } from "./deps.ts";
-import { numberToBigEndian, numberToLittleEndian } from "./endianness.ts";
+import { numberToLittleEndian } from "./endianness.ts";
 import { zigZagEncode } from "./zig-zag-encoding.ts";
 
 function numberToVarInt(n: number | Long | string) {
-  const bigEndian = numberToBigEndian(n);
-  return littleEndianToVarint(bigEndian);
+  const littleEndian = numberToLittleEndian(n);
+  return littleEndianToVarint(littleEndian);
 }
 
 function appendBuffer(buffer1: Uint8Array, buffer2: Uint8Array) {

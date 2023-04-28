@@ -1,11 +1,11 @@
 import { Writer } from "./writer.ts";
 import { assertEquals } from "https://deno.land/std@0.184.0/testing/asserts.ts";
 
-const assertUint8ArraysEqual = (first: Uint8Array, second: Uint8Array) => {
-  assertEquals(first.length, second.length, "Uint8Array lengths are equal");
-  first.every((value, index) => {
-    assertEquals(value, second[index], `Array pos ${index} are equal`);
-    return value === second[index];
+const assertUint8ArraysEqual = (actual: Uint8Array, expect: Uint8Array) => {
+  assertEquals(actual.length, expect.length, "Uint8Array lengths are equal");
+  actual.every((value, index) => {
+    assertEquals(value, expect[index], `Array pos ${index} are equal`);
+    return value === expect[index];
   });
 };
 
@@ -19,6 +19,25 @@ Deno.test("Writer", async (t) => {
     await tt.step("150", () => {
       const writer = Writer.create();
       const encoded = writer.uint32(150).finish();
+      assertUint8ArraysEqual(encoded, new Uint8Array([0x96, 0x01]));
+    });
+  });
+
+  await t.step("uint64", async (tt) => {
+    await tt.step("0x1234567890", () => {
+      const writer = Writer.create();
+      const encoded = writer.uint64("0x1234567890").finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02])
+      );
+    });
+  });
+
+  await t.step("int32", async (tt) => {
+    await tt.step("150", () => {
+      const writer = Writer.create();
+      const encoded = writer.int32(150).finish();
       assertUint8ArraysEqual(encoded, new Uint8Array([0x96, 0x01]));
     });
   });
@@ -70,6 +89,24 @@ Deno.test("Writer", async (t) => {
     await tt.step("1", () => {
       const writer = Writer.create();
       const encoded = writer.fixed32(1).finish();
+      assertUint8ArraysEqual(encoded, new Uint8Array([0x01, 0x00, 0x00, 0x00]));
+    });
+  });
+
+  await t.step("sfixed32", async (tt) => {
+    await tt.step("0", () => {
+      const writer = Writer.create();
+      const encoded = writer.sfixed32(0).finish();
+      assertUint8ArraysEqual(encoded, new Uint8Array([0x00, 0x00, 0x00, 0x00]));
+    });
+    await tt.step("1", () => {
+      const writer = Writer.create();
+      const encoded = writer.sfixed32(1).finish();
+      assertUint8ArraysEqual(encoded, new Uint8Array([0x02, 0x00, 0x00, 0x00]));
+    });
+    await tt.step("-1", () => {
+      const writer = Writer.create();
+      const encoded = writer.sfixed32(-1).finish();
       assertUint8ArraysEqual(encoded, new Uint8Array([0x01, 0x00, 0x00, 0x00]));
     });
   });
