@@ -34,6 +34,36 @@ Deno.test("Writer", async (t) => {
     });
   });
 
+  await t.step("int64", async (tt) => {
+    await tt.step("0x1234567890", () => {
+      const writer = Writer.create();
+      const encoded = writer.int64("0x1234567890").finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02])
+      );
+    });
+  });
+
+  await t.step("sint64", async (tt) => {
+    await tt.step("0x1234567890", () => {
+      const writer = Writer.create();
+      const encoded = writer.sint64("0x1234567890").finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0xa0, 0xe2, 0xb3, 0xc5, 0xc6, 0x04])
+      );
+    });
+    await tt.step("-0x1234567890", () => {
+      const writer = Writer.create();
+      const encoded = writer.sint64("-0x1234567890").finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0x9f, 0xe2, 0xb3, 0xc5, 0xc6, 0x04])
+      );
+    });
+  });
+
   await t.step("int32", async (tt) => {
     await tt.step("150", () => {
       const writer = Writer.create();
@@ -125,6 +155,25 @@ Deno.test("Writer", async (t) => {
       assertUint8ArraysEqual(
         encoded,
         new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+      );
+    });
+  });
+
+  await t.step("sfixed64", async (tt) => {
+    await tt.step("0x1234567890", () => {
+      const writer = Writer.create();
+      const encoded = writer.sfixed64("0x1234567890").finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0x20, 0xf1, 0xac, 0x68, 0x24, 0x00, 0x00, 0x00])
+      );
+    });
+    await tt.step("-0x1234567890", () => {
+      const writer = Writer.create();
+      const encoded = writer.sfixed64("-0x1234567890").finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0x1f, 0xf1, 0xac, 0x68, 0x24, 0x00, 0x00, 0x00])
       );
     });
   });
