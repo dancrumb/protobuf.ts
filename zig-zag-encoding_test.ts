@@ -1,6 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.184.0/testing/asserts.ts";
 import { zigZagEncode, zigZagDecode } from "./zig-zag-encoding.ts";
-import { Long } from "./deps.ts";
 import { assertLongEquals } from "./assert-long-equals.ts";
 
 Deno.test("zigZagEncode", async (t) => {
@@ -11,20 +10,12 @@ Deno.test("zigZagEncode", async (t) => {
   await t.step("-2", () => assertEquals(zigZagEncode(-2), 3));
   await t.step("2", () => assertEquals(zigZagEncode(2), 4));
   await t.step("-3", () => assertEquals(zigZagEncode(-3), 5));
-  await t.step("0x7fffffff", () =>
-    assertLongEquals(
-      zigZagEncode(Long.fromValue("0x7fffffff", true)),
-      "0xfffffffe",
-      "0xfffffffe"
-    )
+  await t.step("0x7fffffff encodes to 0xfffffffe", () =>
+    assertLongEquals(zigZagEncode("0x7fffffff"), "0xfffffffe", "0xfffffffe")
   );
 
-  await t.step("-0x80000000", () =>
-    assertLongEquals(
-      zigZagEncode(Long.fromValue("-0x80000000", true)),
-      "0xffffffff",
-      "0xffffffff"
-    )
+  await t.step("-0x7fffffff encodes to 0xfffffffd", () =>
+    assertLongEquals(zigZagEncode("-0x7fffffff"), "0xfffffffd", "0xfffffffd")
   );
 });
 
@@ -35,19 +26,21 @@ Deno.test("zigZagDecode", async (t) => {
   await t.step("-2", () => assertEquals(zigZagDecode(3), -2));
   await t.step("2", () => assertEquals(zigZagDecode(4), 2));
   await t.step("-3", () => assertEquals(zigZagDecode(5), -3));
-  await t.step("0x7fffffff", () =>
+  await t.step("0xfffffffe -> 0x7fffffff", () => {
     assertLongEquals(
-      zigZagDecode(Long.fromValue("0xfffffffe", true)),
+      zigZagDecode("0xfffffffe"),
       "0x7fffffff",
-      "0x7fffffff"
-    )
-  );
+      "0x7fffffff",
+      true
+    );
+  });
 
-  await t.step("0xffffffff", () =>
+  await t.step("0xffffffff", () => {
     assertLongEquals(
-      zigZagDecode(Long.fromValue("0xffffffff", true)),
+      zigZagDecode("0xffffffff"),
       "-0x80000000",
-      "-0x80000000"
-    )
-  );
+      "-0x80000000",
+      true
+    );
+  });
 });
