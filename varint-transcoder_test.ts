@@ -37,11 +37,11 @@ Deno.test("littleEndianToVarint", async (t) => {
 
   await t.step("0x80000000", () => {
     const varint = littleEndianToVarint(
-      new Uint8Array([0x00, 0x00, 0x00, 0x80])
+      new Uint8Array([0x00, 0x00, 0x00, 0x80]),
     );
     assertUint8ArraysEqual(
       varint,
-      new Uint8Array([0x80, 0x80, 0x80, 0x80, 0x08])
+      new Uint8Array([0x80, 0x80, 0x80, 0x80, 0x08]),
     );
   });
 });
@@ -49,7 +49,7 @@ Deno.test("littleEndianToVarint", async (t) => {
 Deno.test("varintToLittleEndian", async (t) => {
   await t.step("150 (from the docs)", () => {
     const { value: littleEndian } = varintToLittleEndian(
-      new Uint8Array([0x96, 0x01])
+      new Uint8Array([0x96, 0x01]),
     );
 
     assertUint8ArraysEqual(littleEndian, new Uint8Array([150]));
@@ -68,14 +68,14 @@ Deno.test("varintToLittleEndian", async (t) => {
 
   await t.step("0x80", () => {
     const { value: littleEndian } = varintToLittleEndian(
-      new Uint8Array([0x80, 0x01])
+      new Uint8Array([0x80, 0x01]),
     );
     assertUint8ArraysEqual(littleEndian, new Uint8Array([0x80]));
   });
 
   await t.step("0x8000", () => {
     const { value: littleEndian } = varintToLittleEndian(
-      new Uint8Array([0x80, 0x80, 0x02])
+      new Uint8Array([0x80, 0x80, 0x02]),
     );
 
     assertUint8ArraysEqual(littleEndian, new Uint8Array([0x00, 0x80]));
@@ -83,7 +83,7 @@ Deno.test("varintToLittleEndian", async (t) => {
 
   await t.step("0x800000", () => {
     const { value: littleEndian } = varintToLittleEndian(
-      new Uint8Array([0x80, 0x80, 0x80, 0x04])
+      new Uint8Array([0x80, 0x80, 0x80, 0x04]),
     );
 
     assertUint8ArraysEqual(littleEndian, new Uint8Array([0x00, 0x00, 0x80]));
@@ -91,12 +91,12 @@ Deno.test("varintToLittleEndian", async (t) => {
 
   await t.step("0x80000000", () => {
     const { value: littleEndian } = varintToLittleEndian(
-      new Uint8Array([0x80, 0x80, 0x80, 0x80, 0x08])
+      new Uint8Array([0x80, 0x80, 0x80, 0x80, 0x08]),
     );
 
     assertUint8ArraysEqual(
       littleEndian,
-      new Uint8Array([0x00, 0x00, 0x00, 0x80])
+      new Uint8Array([0x00, 0x00, 0x00, 0x80]),
     );
   });
 });

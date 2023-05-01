@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.184.0/testing/asserts.ts";
-import { zigZagEncode, zigZagDecode } from "./zig-zag-encoding.ts";
+import { zigZagDecode, zigZagEncode } from "./zig-zag-encoding.ts";
 import { assertLongEquals } from "./assert-long-equals.ts";
 import { Long } from "./deps.ts";
 
@@ -11,19 +11,23 @@ Deno.test("zigZagEncode", async (t) => {
   await t.step("-2", () => assertEquals(zigZagEncode(-2), 3));
   await t.step("2", () => assertEquals(zigZagEncode(2), 4));
   await t.step("-3", () => assertEquals(zigZagEncode(-3), 5));
-  await t.step("0x7fffffff encodes to 0xfffffffe", () =>
-    assertLongEquals(zigZagEncode("0x7fffffff"), "0xfffffffe")
+  await t.step(
+    "0x7fffffff encodes to 0xfffffffe",
+    () => assertLongEquals(zigZagEncode("0x7fffffff"), "0xfffffffe"),
   );
 
-  await t.step("-0x7fffffff encodes to 0xfffffffd", () =>
-    assertLongEquals(zigZagEncode("-0x7fffffff"), "0xfffffffd")
+  await t.step(
+    "-0x7fffffff encodes to 0xfffffffd",
+    () => assertLongEquals(zigZagEncode("-0x7fffffff"), "0xfffffffd"),
   );
-  await t.step("1L encodes to 2L", () =>
-    assertLongEquals(zigZagEncode(Long.fromValue(1)), Long.fromValue(2))
+  await t.step(
+    "1L encodes to 2L",
+    () => assertLongEquals(zigZagEncode(Long.fromValue(1)), Long.fromValue(2)),
   );
 
-  await t.step("-1L encodes to 1L", () =>
-    assertLongEquals(zigZagEncode(Long.fromValue(-1)), Long.fromValue(1))
+  await t.step(
+    "-1L encodes to 1L",
+    () => assertLongEquals(zigZagEncode(Long.fromValue(-1)), Long.fromValue(1)),
   );
 });
 
@@ -44,14 +48,12 @@ Deno.test("zigZagDecode", async (t) => {
   await t.step("2L decodes to 1L", () =>
     assertLongEquals(
       zigZagDecode(Long.fromValue(2, true)),
-      Long.fromValue(1, true)
-    )
-  );
+      Long.fromValue(1, true),
+    ));
 
   await t.step("1L decodes to -1L", () =>
     assertLongEquals(
       zigZagDecode(Long.fromValue(1, true)),
-      Long.fromValue(-1, true)
-    )
-  );
+      Long.fromValue(-1, true),
+    ));
 });

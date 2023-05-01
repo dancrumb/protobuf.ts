@@ -47,7 +47,7 @@ export class Reader {
    */
   public uint32(): number {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos)
+      this.buf.subarray(this.pos),
     );
     this.pos += bytesRead;
     return littleEndianToNumber(value, false);
@@ -67,7 +67,7 @@ export class Reader {
    */
   public sint32(): number {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos)
+      this.buf.subarray(this.pos),
     );
     this.pos += bytesRead;
     const long = Long.fromBytesLE([...value], true);
@@ -81,7 +81,7 @@ export class Reader {
    */
   public uint64(): Long {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos)
+      this.buf.subarray(this.pos),
     );
     this.pos += bytesRead;
     return littleEndianToLong(value, false);
@@ -101,7 +101,7 @@ export class Reader {
    */
   public sint64(): Long {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos)
+      this.buf.subarray(this.pos),
     );
     this.pos += bytesRead;
     const long = Long.fromBytesLE([...value], true);
@@ -115,7 +115,7 @@ export class Reader {
    */
   public bool(): boolean {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos)
+      this.buf.subarray(this.pos),
     );
     this.pos += bytesRead;
     return value[0] !== 0;

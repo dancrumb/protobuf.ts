@@ -29,7 +29,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.uint64("0x1234567890").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02])
+        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02]),
       );
     });
   });
@@ -40,7 +40,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.int64("0x1234567890").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02])
+        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02]),
       );
     });
   });
@@ -51,7 +51,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.sint64("0x1234567890").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0xa0, 0xe2, 0xb3, 0xc5, 0xc6, 0x04])
+        new Uint8Array([0xa0, 0xe2, 0xb3, 0xc5, 0xc6, 0x04]),
       );
     });
     await tt.step("-0x1234567890", () => {
@@ -59,7 +59,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.sint64("-0x1234567890").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x9f, 0xe2, 0xb3, 0xc5, 0xc6, 0x04])
+        new Uint8Array([0x9f, 0xe2, 0xb3, 0xc5, 0xc6, 0x04]),
       );
     });
   });
@@ -105,7 +105,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.string("testing").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x07, 0x74, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67])
+        new Uint8Array([0x07, 0x74, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67]),
       );
     });
   });
@@ -146,7 +146,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.fixed64(0).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
     });
     await tt.step("1", () => {
@@ -154,7 +154,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.fixed64(1).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
     });
   });
@@ -165,7 +165,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.sfixed64("0x1234567890").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x20, 0xf1, 0xac, 0x68, 0x24, 0x00, 0x00, 0x00])
+        new Uint8Array([0x20, 0xf1, 0xac, 0x68, 0x24, 0x00, 0x00, 0x00]),
       );
     });
     await tt.step("-0x1234567890", () => {
@@ -173,7 +173,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.sfixed64("-0x1234567890").finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x1f, 0xf1, 0xac, 0x68, 0x24, 0x00, 0x00, 0x00])
+        new Uint8Array([0x1f, 0xf1, 0xac, 0x68, 0x24, 0x00, 0x00, 0x00]),
       );
     });
   });
@@ -184,7 +184,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(0).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
     });
     await tt.step("1", () => {
@@ -192,7 +192,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(1).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f]),
       );
     });
     await tt.step("0.0", () => {
@@ -200,7 +200,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(0).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
     });
     await tt.step("1.0", () => {
@@ -208,7 +208,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(1).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f]),
       );
     });
     await tt.step("0.25", () => {
@@ -216,7 +216,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(0.25).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x3f])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x3f]),
       );
     });
     await tt.step("-0.25", () => {
@@ -224,7 +224,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(-0.25).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0xbf])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0xbf]),
       );
     });
     await tt.step("1/3", () => {
@@ -232,7 +232,7 @@ Deno.test("Writer", async (t) => {
       const encoded = writer.double(1 / 3).finish();
       assertUint8ArraysEqual(
         encoded,
-        new Uint8Array([0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0xd5, 0x3f])
+        new Uint8Array([0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0xd5, 0x3f]),
       );
     });
     await tt.step("π", () => {
@@ -241,8 +241,8 @@ Deno.test("Writer", async (t) => {
       assertUint8ArraysEqual(
         encoded,
         new Uint8Array(
-          [0x40, 0x09, 0x21, 0xfb, 0x54, 0x44, 0x2d, 0x18].reverse()
-        )
+          [0x40, 0x09, 0x21, 0xfb, 0x54, 0x44, 0x2d, 0x18].reverse(),
+        ),
       );
     });
   });

@@ -21,7 +21,7 @@ export function numberToBigEndian(num: number | Long | string): Uint8Array {
 
 export function numberToLittleEndian(
   num: number | Long | string,
-  width = 0
+  width = 0,
 ): Uint8Array {
   const bytes = Long.fromValue(num).toBytesLE();
   if (width === 0) {

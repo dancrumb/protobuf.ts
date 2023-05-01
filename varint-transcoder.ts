@@ -2,7 +2,6 @@ import { Long } from "./deps.ts";
 
 /**
  * Converts a number to binary128, returning the LSB first and then ever more significant bytes
- *
  */
 function* encoder(littleEndian: Uint8Array) {
   let long = Long.fromValue(Long.fromBytesLE(Array.from(littleEndian), true));

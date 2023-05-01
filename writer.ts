@@ -199,10 +199,9 @@ export class Writer {
    * @returns `this`
    */
   public bytes(value: Uint8Array | string): Writer {
-    const byteArray =
-      typeof value === "string"
-        ? Uint8Array.from(atob(value), (c) => c.charCodeAt(0))
-        : value;
+    const byteArray = typeof value === "string"
+      ? Uint8Array.from(atob(value), (c) => c.charCodeAt(0))
+      : value;
     this.appendBuffer(byteArray);
     return this;
   }

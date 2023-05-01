@@ -3,7 +3,7 @@ import { Long } from "./deps.ts";
 
 export const assertLongEquals = (
   a: Long | number | string,
-  b: Long | number | string
+  b: Long | number | string,
 ) => {
   const aLong = a instanceof Long ? a : Long.fromValue(a);
   const bLong = b instanceof Long ? b : Long.fromValue(b);
