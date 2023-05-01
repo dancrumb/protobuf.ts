@@ -5,9 +5,10 @@ class Long extends DenoLong {
   /**
    * The original implementation of Long.fromValue handles strings very poorly
    */
-  static fromValue(num: string | number | Long) {
+  static fromValue(num: string | number | Long, signed = false) {
     if (typeof num === "string") {
-      return getLongFromString(num);
+      const isExplicitlySigned = num.charAt(0) === "+" || num.charAt(0) === "-";
+      return getLongFromString(num, signed || isExplicitlySigned);
     }
     return DenoLong.fromValue(num);
   }

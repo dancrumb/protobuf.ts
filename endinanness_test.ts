@@ -18,7 +18,6 @@ Deno.test("handles 0xFF", () => {
 
 Deno.test("handles 0x1FF", () => {
   const numberArray = numberToBigEndian(0x1ff);
-  console.log({ numberArray });
   assertUint8ArraysEqual(numberArray, new Uint8Array([0x1, 0xff]));
 });
 

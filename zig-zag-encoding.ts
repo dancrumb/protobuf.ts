@@ -28,5 +28,5 @@ export function zigZagDecode(n: number | Long | string): typeof n {
     long = n;
   }
 
-  return long.shiftRightUnsigned(1).xor(long.and(1).negate());
+  return long.shiftRightUnsigned(1).xor(long.and(1).negate()).toSigned();
 }
