@@ -17,7 +17,9 @@ export function zigZagEncode(n: number | Long | string): typeof n {
   return long.shiftRight(63).xor(long.shiftLeft(1));
 }
 
-export function zigZagDecode(n: number | Long | string): typeof n {
+export function zigZagDecode(n: number): number;
+export function zigZagDecode(n: Long | string): Long;
+export function zigZagDecode(n: number | Long | string): number | Long {
   if (typeof n === "number") {
     return (n >>> 1) ^ -(n & 1);
   }

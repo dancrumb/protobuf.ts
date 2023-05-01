@@ -1,4 +1,7 @@
 import { Long } from "./deps.ts";
+import { littleEndianToLong, littleEndianToNumber } from "./endianness.ts";
+import { varintToLittleEndian } from "./varint-transcoder.ts";
+import { zigZagDecode } from "./zig-zag-encoding.ts";
 
 enum WireType {
   VARINT = 0,
@@ -32,12 +35,22 @@ export class Reader {
     return new Reader(buffer);
   }
 
+  private getSubBuffer(length: number) {
+    const subBuffer = this.buf.subarray(this.pos, this.pos + length);
+    this.pos += length;
+    return subBuffer;
+  }
+
   /**
    * Reads a varint as an unsigned 32 bit value.
    * @returns Value read
    */
   public uint32(): number {
-    return 0;
+    const { bytesRead, value } = varintToLittleEndian(
+      this.buf.subarray(this.pos)
+    );
+    this.pos += bytesRead;
+    return littleEndianToNumber(value, false);
   }
 
   /**
@@ -45,7 +58,7 @@ export class Reader {
    * @returns Value read
    */
   public int32(): number {
-    return 0;
+    return this.uint32();
   }
 
   /**
@@ -53,15 +66,13 @@ export class Reader {
    * @returns Value read
    */
   public sint32(): number {
-    return 0;
-  }
-
-  /**
-   * Reads a varint as a signed 64 bit value.
-   * @returns Value read
-   */
-  public int64(): Long {
-    return Long.fromInt(0);
+    const { bytesRead, value } = varintToLittleEndian(
+      this.buf.subarray(this.pos)
+    );
+    this.pos += bytesRead;
+    const long = Long.fromBytesLE([...value], true);
+    const zigZagLong = zigZagDecode(long);
+    return zigZagLong.toNumber();
   }
 
   /**
@@ -69,7 +80,19 @@ export class Reader {
    * @returns Value read
    */
   public uint64(): Long {
-    return Long.fromInt(0);
+    const { bytesRead, value } = varintToLittleEndian(
+      this.buf.subarray(this.pos)
+    );
+    this.pos += bytesRead;
+    return littleEndianToLong(value, false);
+  }
+
+  /**
+   * Reads a varint as a signed 64 bit value.
+   * @returns Value read
+   */
+  public int64(): Long {
+    return this.uint64();
   }
 
   /**
@@ -77,7 +100,13 @@ export class Reader {
    * @returns Value read
    */
   public sint64(): Long {
-    return Long.fromInt(0, true);
+    const { bytesRead, value } = varintToLittleEndian(
+      this.buf.subarray(this.pos)
+    );
+    this.pos += bytesRead;
+    const long = Long.fromBytesLE([...value], true);
+    const zigZagLong = zigZagDecode(long);
+    return zigZagLong;
   }
 
   /**
@@ -85,7 +114,11 @@ export class Reader {
    * @returns Value read
    */
   public bool(): boolean {
-    return false;
+    const { bytesRead, value } = varintToLittleEndian(
+      this.buf.subarray(this.pos)
+    );
+    this.pos += bytesRead;
+    return value[0] !== 0;
   }
 
   /**
@@ -93,7 +126,8 @@ export class Reader {
    * @returns Value read
    */
   public fixed32(): number {
-    return 0;
+    const fixed = this.getSubBuffer(4);
+    return littleEndianToNumber(fixed);
   }
 
   /**
@@ -101,7 +135,8 @@ export class Reader {
    * @returns Value read
    */
   public sfixed32(): number {
-    return 0;
+    const fixed = this.getSubBuffer(4);
+    return zigZagDecode(littleEndianToNumber(fixed));
   }
 
   /**
@@ -109,7 +144,8 @@ export class Reader {
    * @returns Value read
    */
   public fixed64(): Long {
-    return Long.fromInt(0);
+    const fixed = this.getSubBuffer(8);
+    return littleEndianToLong(fixed);
   }
 
   /**
@@ -117,7 +153,8 @@ export class Reader {
    * @returns Value read
    */
   public sfixed64(): Long {
-    return Long.fromInt(0, true);
+    const fixed = this.getSubBuffer(8);
+    return zigZagDecode(littleEndianToLong(fixed));
   }
 
   /**
@@ -125,7 +162,8 @@ export class Reader {
    * @returns Value read
    */
   public float(): number {
-    return 0;
+    const floatBuffer = this.getSubBuffer(4);
+    return new DataView(floatBuffer.buffer).getFloat32(0, true);
   }
 
   /**
@@ -133,7 +171,8 @@ export class Reader {
    * @returns Value read
    */
   public double(): number {
-    return 0;
+    const doubleBuffer = this.getSubBuffer(8);
+    return new DataView(doubleBuffer.buffer).getFloat64(0, true);
   }
 
   /**
@@ -141,7 +180,8 @@ export class Reader {
    * @returns Value read
    */
   public bytes(): Uint8Array {
-    return new Uint8Array();
+    const length = this.uint32();
+    return this.getSubBuffer(length);
   }
 
   /**
@@ -149,7 +189,7 @@ export class Reader {
    * @returns Value read
    */
   public string(): string {
-    return "";
+    return [...this.bytes()].map((byte) => String.fromCharCode(byte)).join("");
   }
 
   /**

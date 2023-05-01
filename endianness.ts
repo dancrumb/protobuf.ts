@@ -30,3 +30,19 @@ export function numberToLittleEndian(
   bytes.length = width;
   return new Uint8Array(Array.from(bytes, (b) => b ?? 0));
 }
+
+export function littleEndianToNumber(le: Uint8Array, signed = false): number {
+  if (le.length > 4) {
+    throw new Error(`Got TypedArray of length ${le.length} for a number`);
+  }
+  const long = Long.fromBytesLE([...le], !signed);
+  return long.toNumber();
+}
+
+export function littleEndianToLong(le: Uint8Array, signed = false): Long {
+  if (le.length > 8) {
+    throw new Error(`Got TypedArray of length ${le.length} for a Long`);
+  }
+  const long = Long.fromBytesLE([...le], !signed);
+  return long;
+}

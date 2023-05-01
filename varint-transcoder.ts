@@ -40,6 +40,12 @@ function decoder(varint: Uint8Array) {
       bitCount -= 8;
     }
     if (continuation === false) {
+      if (bitCount !== 0) {
+        const newByte = currentValue & 0xff;
+        if (newByte !== 0) {
+          byteArray.push(newByte);
+        }
+      }
       return {
         bytesRead,
         value: Uint8Array.from(byteArray),
