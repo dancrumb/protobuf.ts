@@ -30,15 +30,15 @@ export class Reader {
     this.buf = Uint8Array.from(buf);
   }
 
-  private pos = 0;
+  private _pos = 0;
 
   /** Current buffer position. */
-  get position() {
-    return this.pos;
+  get pos() {
+    return this._pos;
   }
 
   /** Length of buffer */
-  get length() {
+  get len() {
     return this.buf.length;
   }
 
@@ -51,16 +51,16 @@ export class Reader {
   }
 
   private getSubBuffer(length: number) {
-    const subBuffer = this.buf.subarray(this.pos, this.pos + length);
-    this.pos += length;
+    const subBuffer = this.buf.subarray(this._pos, this._pos + length);
+    this._pos += length;
     return subBuffer;
   }
 
   private getVarint(): Uint8Array {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos),
+      this.buf.subarray(this._pos)
     );
-    this.pos += bytesRead;
+    this._pos += bytesRead;
     return value;
   }
 
@@ -215,14 +215,14 @@ export class Reader {
    */
   public skip(length?: number): Reader {
     if (length === undefined) {
-      while ((this.buf[this.pos] & 0x80) !== 0) {
-        this.pos++;
+      while ((this.buf[this._pos] & 0x80) !== 0) {
+        this._pos++;
       }
-      this.pos++;
+      this._pos++;
     } else {
-      this.pos += length;
+      this._pos += length;
     }
-    this.pos = Math.min(this.pos, this.length);
+    this._pos = Math.min(this._pos, this.len);
     return this;
   }
 
