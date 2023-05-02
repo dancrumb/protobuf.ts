@@ -10,26 +10,41 @@ enum WireType {
   I32 = 5,
 }
 
+const leIsSigned = (le: Uint8Array) => {
+  const lastByte = le[le.length - 1];
+  return (lastByte & 0x80) === 0x80;
+};
+
+/**
+ * Protocol Buffer wire format reader
+ *
+ * Currently, this can only read from a Uint8Array buffer; future iterations will be able to read from a Stream
+ */
 export class Reader {
+  private buf: Uint8Array;
   /**
    * Constructs a new reader instance using the specified buffer.
    * @param buffer Buffer to read from
    */
-  private constructor(public buf: Uint8Array) {
-    this.len = buf.length;
+  private constructor(buf: Uint8Array) {
+    this.buf = Uint8Array.from(buf);
   }
 
-  /** Read buffer position. */
-  public pos = 0;
+  private pos = 0;
 
-  /** Read buffer length. */
-  public len = 0;
+  /** Current buffer position. */
+  get position() {
+    return this.pos;
+  }
+
+  /** Length of buffer */
+  get length() {
+    return this.buf.length;
+  }
 
   /**
    * Creates a new reader using the specified buffer.
    * @param buffer Buffer to read from
-   * @returns A {@link BufferReader} if `buffer` is a Buffer, otherwise a {@link Reader}
-   * @throws {Error} If `buffer` is not a valid buffer
    */
   public static create(buffer: Uint8Array): Reader {
     return new Reader(buffer);
@@ -41,15 +56,21 @@ export class Reader {
     return subBuffer;
   }
 
+  private getVarint(): Uint8Array {
+    const { bytesRead, value } = varintToLittleEndian(
+      this.buf.subarray(this.pos),
+    );
+    this.pos += bytesRead;
+    return value;
+  }
+
   /**
    * Reads a varint as an unsigned 32 bit value.
    * @returns Value read
    */
   public uint32(): number {
-    const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos),
-    );
-    this.pos += bytesRead;
+    const value = this.getVarint();
+
     return littleEndianToNumber(value, false);
   }
 
@@ -58,7 +79,13 @@ export class Reader {
    * @returns Value read
    */
   public int32(): number {
-    return this.uint32();
+    const value = this.getVarint();
+    if (leIsSigned(value)) {
+      console.log({ value });
+      const number = littleEndianToNumber(value);
+      return -((~number & 0xffffffff) + 1);
+    }
+    return littleEndianToNumber(value, false);
   }
 
   /**
@@ -66,10 +93,7 @@ export class Reader {
    * @returns Value read
    */
   public sint32(): number {
-    const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos),
-    );
-    this.pos += bytesRead;
+    const value = this.getVarint();
     const long = Long.fromBytesLE([...value], true);
     const zigZagLong = zigZagDecode(long);
     return zigZagLong.toNumber();
@@ -80,10 +104,7 @@ export class Reader {
    * @returns Value read
    */
   public uint64(): Long {
-    const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos),
-    );
-    this.pos += bytesRead;
+    const value = this.getVarint();
     return littleEndianToLong(value, false);
   }
 
@@ -92,7 +113,8 @@ export class Reader {
    * @returns Value read
    */
   public int64(): Long {
-    return this.uint64();
+    const value = this.getVarint();
+    return littleEndianToLong(value, leIsSigned(value));
   }
 
   /**
@@ -100,10 +122,7 @@ export class Reader {
    * @returns Value read
    */
   public sint64(): Long {
-    const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos),
-    );
-    this.pos += bytesRead;
+    const value = this.getVarint();
     const long = Long.fromBytesLE([...value], true);
     const zigZagLong = zigZagDecode(long);
     return zigZagLong;
@@ -114,10 +133,7 @@ export class Reader {
    * @returns Value read
    */
   public bool(): boolean {
-    const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this.pos),
-    );
-    this.pos += bytesRead;
+    const value = this.getVarint();
     return value[0] !== 0;
   }
 
@@ -206,7 +222,7 @@ export class Reader {
     } else {
       this.pos += length;
     }
-    this.pos = Math.min(this.pos, this.len);
+    this.pos = Math.min(this.pos, this.length);
     return this;
   }
 

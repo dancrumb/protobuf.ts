@@ -43,6 +43,26 @@ Deno.test("Writer", async (t) => {
         new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02]),
       );
     });
+
+    await tt.step("-150", () => {
+      const writer = Writer.create();
+      const encoded = writer.int64(-150).finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([
+          0xea,
+          0xfe,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0x01,
+        ]),
+      );
+    });
   });
 
   await t.step("sint64", async (tt) => {
@@ -69,6 +89,14 @@ Deno.test("Writer", async (t) => {
       const writer = Writer.create();
       const encoded = writer.int32(150).finish();
       assertUint8ArraysEqual(encoded, new Uint8Array([0x96, 0x01]));
+    });
+    await tt.step("-150", () => {
+      const writer = Writer.create();
+      const encoded = writer.int32(-150).finish();
+      assertUint8ArraysEqual(
+        encoded,
+        new Uint8Array([0xea, 0xfe, 0xff, 0xff, 0x0f]),
+      );
     });
   });
 

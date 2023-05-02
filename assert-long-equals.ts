@@ -2,11 +2,11 @@ import { assert } from "https://deno.land/std@0.184.0/testing/asserts.ts";
 import { Long } from "./deps.ts";
 
 export const assertLongEquals = (
-  a: Long | number | string,
-  b: Long | number | string,
+  actual: Long | number | string,
+  expected: Long | number | string,
 ) => {
-  const aLong = a instanceof Long ? a : Long.fromValue(a);
-  const bLong = b instanceof Long ? b : Long.fromValue(b);
+  const aLong = expected instanceof Long ? expected : Long.fromValue(expected);
+  const bLong = actual instanceof Long ? actual : Long.fromValue(actual);
 
   return assert(aLong.equals(bLong), `expected: ${aLong}, got: ${bLong}`);
 };

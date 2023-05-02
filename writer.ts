@@ -65,8 +65,12 @@ export class Writer {
    * @returns `this`
    */
   public int32(value: number): Writer {
-    this.appendBuffer(numberToVarInt(value));
-    return this;
+    if (value < 0) {
+      this.appendBuffer(numberToVarInt(value >>> 0));
+      return this;
+    }
+
+    return this.uint32(value);
   }
 
   /**
