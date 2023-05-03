@@ -17,19 +17,32 @@ This module provides a `Writer` and `Reader` which _do_ work with Deno.
 ## Using this module with ts-proto
 
 First, generate your code with `protoc`. Be sure to include this `--ts_proto_opt=forceLong=long` option, to use the [`long`](https://deno.land/x/long@v1.0.0/mod.ts) module.
+You also need `--ts_proto_opt=esModuleInterop=true` so that `Long` is imported correctly.
 
 Create a directory called `protobufjs` and create a file called `minimal.ts` that looks like this:
 
 ```
-import Long from "long";
-import { Reader, Writer } from "protobuf_ts";
+// deno-lint-ignore-file no-namespace
+import _Long from "long";
+import * as protobuf from "protobuf_ts";
 
-export { Reader, Writer };
+namespace _m0 {
+  export const Reader = protobuf.Reader;
+  export const Writer = protobuf.Writer;
+  export type Reader = protobuf.Reader;
+  export type Writer = protobuf.Writer;
 
-export const util = { Long };
+  export const Long = _Long;
 
-export const configure = () => {};
+  export const util = { Long };
+
+  export const configure = () => {};
+}
+
+export default _m0;
 ```
+
+It's not pretty, but it's the only way I have found to get it working.
 
 Update your import map to include these:
 
