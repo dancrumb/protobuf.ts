@@ -7,6 +7,8 @@ enum WireType {
   VARINT = 0,
   I64 = 1,
   LEN = 2,
+  SGROUP = 3,
+  EGROUP = 4,
   I32 = 5,
 }
 
@@ -51,14 +53,18 @@ export class Reader {
   }
 
   private getSubBuffer(length: number) {
-    const subBuffer = this.buf.subarray(this._pos, this._pos + length);
+    const view = new DataView(this.buf.buffer, this.pos, length);
     this._pos += length;
-    return subBuffer;
+    const buffer = new Uint8Array(length);
+    for (let index = 0; index < length; index++) {
+      buffer[index] = view.getUint8(index);
+    }
+    return buffer;
   }
 
   private getVarint(): Uint8Array {
     const { bytesRead, value } = varintToLittleEndian(
-      this.buf.subarray(this._pos)
+      this.buf.subarray(this._pos),
     );
     this._pos += bytesRead;
     return value;
@@ -81,11 +87,10 @@ export class Reader {
   public int32(): number {
     const value = this.getVarint();
     if (leIsSigned(value)) {
-      console.log({ value });
       const number = littleEndianToNumber(value);
       return -((~number & 0xffffffff) + 1);
     }
-    return littleEndianToNumber(value, false);
+    return littleEndianToNumber(value, true);
   }
 
   /**
@@ -114,7 +119,7 @@ export class Reader {
    */
   public int64(): Long {
     const value = this.getVarint();
-    return littleEndianToLong(value, leIsSigned(value));
+    return littleEndianToLong(value, true);
   }
 
   /**
@@ -143,7 +148,7 @@ export class Reader {
    */
   public fixed32(): number {
     const fixed = this.getSubBuffer(4);
-    return littleEndianToNumber(fixed);
+    return littleEndianToNumber(fixed, true);
   }
 
   /**
@@ -161,7 +166,7 @@ export class Reader {
    */
   public fixed64(): Long {
     const fixed = this.getSubBuffer(8);
-    return littleEndianToLong(fixed);
+    return littleEndianToLong(fixed, true);
   }
 
   /**
@@ -242,8 +247,14 @@ export class Reader {
       case WireType.I64:
         this.skip(8);
         break;
+      case WireType.SGROUP:
+      case WireType.EGROUP:
+        this.skip(0);
+        break;
       case WireType.LEN:
-      /* falls through */
+        console.warn("Unexpected request to skip based on a LEN type");
+        this.skip(0);
+        break;
       default:
         console.error(`Unknown wire type: ${wireType}`);
         throw new Error("Unknown wire type");

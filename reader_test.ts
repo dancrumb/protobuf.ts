@@ -15,7 +15,7 @@ Deno.test("Reader", async (t) => {
   await t.step("Reader.skip()", async (tt) => {
     await tt.step("handles varints", () => {
       const reader = Reader.create(
-        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01])
+        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01]),
       );
       assertEquals(reader.pos, 0, "reader starts at 0");
       reader.skip();
@@ -23,7 +23,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("handles skip length of 0", () => {
       const reader = Reader.create(
-        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01])
+        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01]),
       );
       assertEquals(reader.pos, 0, "reader starts at 0");
       reader.skip(0);
@@ -31,7 +31,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("skip(4)", () => {
       const reader = Reader.create(
-        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01])
+        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01]),
       );
       assertEquals(reader.pos, 0, "reader starts at 0");
       reader.skip(4);
@@ -39,7 +39,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("skip(len+2)", () => {
       const reader = Reader.create(
-        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01])
+        new Uint8Array([0x80, 0x82, 0x03, 0x80, 0x01]),
       );
       assertEquals(reader.pos, 0, "reader starts at 0");
       reader.skip(7);
@@ -89,7 +89,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("int32 is -150", () => {
       const reader = Reader.create(
-        new Uint8Array([0xea, 0xfe, 0xff, 0xff, 0x0f])
+        new Uint8Array([0xea, 0xfe, 0xff, 0xff, 0x0f]),
       );
       const uint32 = reader.int32();
       assertEquals(reader.pos, 5);
@@ -151,7 +151,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("uint64 is 0x1234567890", () => {
       const reader = Reader.create(
-        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02])
+        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02]),
       );
       const uint64 = reader.uint64();
       assertEquals(reader.pos, 6, "Buffer position");
@@ -180,7 +180,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("int64 is 0x1234567890", () => {
       const reader = Reader.create(
-        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02])
+        new Uint8Array([0x90, 0xf1, 0xd9, 0xa2, 0xa3, 0x02]),
       );
       const int64 = reader.int64();
       assertEquals(reader.pos, 6, "Buffer position");
@@ -190,8 +190,17 @@ Deno.test("Reader", async (t) => {
     await tt.step("int64 is -150", () => {
       const reader = Reader.create(
         new Uint8Array([
-          0xea, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01,
-        ])
+          0xea,
+          0xfe,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0xff,
+          0x01,
+        ]),
       );
       const int64 = reader.int64();
       assertEquals(reader.pos, 10);
@@ -220,7 +229,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("sint64 is 0x1234567890", () => {
       const reader = Reader.create(
-        new Uint8Array([0xa0, 0xe2, 0xb3, 0xc5, 0xc6, 0x04])
+        new Uint8Array([0xa0, 0xe2, 0xb3, 0xc5, 0xc6, 0x04]),
       );
       const sint64 = reader.sint64();
       assertEquals(reader.pos, 6, "Buffer position");
@@ -241,7 +250,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("sint64 is -0x1234567890", () => {
       const reader = Reader.create(
-        new Uint8Array([0x9f, 0xe2, 0xb3, 0xc5, 0xc6, 0x04])
+        new Uint8Array([0x9f, 0xe2, 0xb3, 0xc5, 0xc6, 0x04]),
       );
       const sint64 = reader.sint64();
       assertEquals(reader.pos, 6, "Buffer position");
@@ -303,7 +312,7 @@ Deno.test("Reader", async (t) => {
   await t.step("Reader.fixed64()", async (tt) => {
     await tt.step("0", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const fixed64 = reader.fixed64();
       assertEquals(reader.pos, 8);
@@ -311,7 +320,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("1", () => {
       const reader = Reader.create(
-        new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const fixed64 = reader.fixed64();
       assertEquals(reader.pos, 8);
@@ -322,7 +331,7 @@ Deno.test("Reader", async (t) => {
   await t.step("Reader.sfixed64()", async (tt) => {
     await tt.step("0", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const sfixed64 = reader.sfixed64();
       assertEquals(reader.pos, 8);
@@ -330,7 +339,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("1", () => {
       const reader = Reader.create(
-        new Uint8Array([0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const sfixed64 = reader.sfixed64();
       assertEquals(reader.pos, 8);
@@ -338,7 +347,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step("-1", () => {
       const reader = Reader.create(
-        new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const sfixed64 = reader.sfixed64();
       assertEquals(reader.pos, 8);
@@ -376,7 +385,7 @@ Deno.test("Reader", async (t) => {
     });
     await tt.step('"testing"', () => {
       const reader = Reader.create(
-        new Uint8Array([0x07, 0x74, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67])
+        new Uint8Array([0x07, 0x74, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67]),
       );
       const string = reader.string();
       assertEquals(reader.pos, 8);
@@ -387,7 +396,7 @@ Deno.test("Reader", async (t) => {
   await t.step("double", async (tt) => {
     await tt.step("0", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const double = reader.double();
       assertEquals(double, 0);
@@ -395,42 +404,42 @@ Deno.test("Reader", async (t) => {
 
     await tt.step("1", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f]),
       );
       const double = reader.double();
       assertEquals(1, double);
     });
     await tt.step("0.0", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
       );
       const double = reader.double();
       assertEquals(0, double);
     });
     await tt.step("1.0", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f]),
       );
       const double = reader.double();
       assertEquals(1, double);
     });
     await tt.step("0.25", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x3f])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x3f]),
       );
       const double = reader.double();
       assertEquals(0.25, double);
     });
     await tt.step("-0.25", () => {
       const reader = Reader.create(
-        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0xbf])
+        new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0xbf]),
       );
       const double = reader.double();
       assertEquals(-0.25, double);
     });
     await tt.step("1/3", () => {
       const reader = Reader.create(
-        new Uint8Array([0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0xd5, 0x3f])
+        new Uint8Array([0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0xd5, 0x3f]),
       );
       const double = reader.double();
       assertAlmostEquals(1 / 3, double);
@@ -439,9 +448,9 @@ Deno.test("Reader", async (t) => {
       const reader = Reader.create(
         new Uint8Array(
           new Uint8Array(
-            [0x40, 0x09, 0x21, 0xfb, 0x54, 0x44, 0x2d, 0x18].reverse()
-          )
-        )
+            [0x40, 0x09, 0x21, 0xfb, 0x54, 0x44, 0x2d, 0x18].reverse(),
+          ),
+        ),
       );
       const double = reader.double();
       assertAlmostEquals(Math.PI, double);

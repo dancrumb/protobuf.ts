@@ -122,7 +122,7 @@ export class Writer {
    * @returns `this`
    */
   public bool(value: boolean): Writer {
-    const varint = littleEndianToVarint(new Uint8Array([value ? 1 : 0]));
+    const varint = new Uint8Array([value ? 1 : 0]);
     this.buffer = appendBuffer(this.buffer, varint);
     return this;
   }
@@ -203,10 +203,11 @@ export class Writer {
    * @returns `this`
    */
   public bytes(value: Uint8Array | string): Writer {
-    const byteArray = typeof value === "string"
-      ? Uint8Array.from(atob(value), (c) => c.charCodeAt(0))
-      : value;
-    this.appendBuffer(byteArray);
+    const byteArray =
+      typeof value === "string"
+        ? Uint8Array.from(atob(value), (c) => c.charCodeAt(0))
+        : value;
+    this.appendBuffer(new Uint8Array([byteArray.length, ...byteArray]));
     return this;
   }
 

@@ -8,18 +8,23 @@ https://deno.land/x/long@v1.0.0/mod.ts). Future versions may add BigInt support.
 
 # Purpose
 
-This is designed to help users of [`ts-proto`](https://github.com/stephenh/ts-proto).
+This is designed to help users of
+[`ts-proto`](https://github.com/stephenh/ts-proto).
 
-If you us this plugin to generate code, you'll see that it relies on `protobufjs`, which doesn't work great with Deno.
+If you us this plugin to generate code, you'll see that it relies on
+`protobufjs`, which doesn't work great with Deno.
 
 This module provides a `Writer` and `Reader` which _do_ work with Deno.
 
 ## Using this module with ts-proto
 
-First, generate your code with `protoc`. Be sure to include this `--ts_proto_opt=forceLong=long` option, to use the [`long`](https://deno.land/x/long@v1.0.0/mod.ts) module.
-You also need `--ts_proto_opt=esModuleInterop=true` so that `Long` is imported correctly.
+First, generate your code with `protoc`. Be sure to include this
+`--ts_proto_opt=forceLong=long` option, to use the
+[`long`](https://deno.land/x/long@v1.0.0/mod.ts) module. You also need
+`--ts_proto_opt=esModuleInterop=true` so that `Long` is imported correctly.
 
-Create a directory called `protobufjs` and create a file called `minimal.ts` that looks like this:
+Create a directory called `protobufjs` and create a file called `minimal.ts`
+that looks like this:
 
 ```
 // deno-lint-ignore-file no-namespace

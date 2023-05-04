@@ -1,7 +1,8 @@
 {
   "lint": {
     "files": {
-      "include": ["./"]
+      "include": ["./"],
+      "exclude": ["./example/example.ts"]
     },
     "rules": {
       "tags": ["recommended"]

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+message ExampleMessage {
+  int32 my_int_pos = 1;
+  int32 my_int_neg = 2;
+  int64 my_long_pos = 3;
+  int64 my_long_neg = 4;
+  uint32 my_uint = 5;
+  uint64 my_ulong = 6;
+  sint32 my_sint_pos = 7;
+  sint32 my_sint_neg = 8;
+  sint64 my_slong_pos = 9;
+  sint64 my_slong_neg = 10;
+  fixed32 my_fixed32 = 11;
+  fixed64 my_fixed64 = 12;
+  sfixed32 my_sfixed32_pos = 13;
+  sfixed32 my_sfixed32_neg = 14;
+  sfixed64 my_sfixed64_pos = 15;
+  sfixed64 my_sfixed64_neg = 16;
+  float my_float = 17;
+  double my_double = 18;
+  bool my_bool = 19;
+  string my_string = 20;
+  bytes my_bytes = 21;
+  repeated fixed32 my_repeated_fixed32 = 22;
+  repeated uint32 my_repeated_uint = 23;
+  repeated uint64 my_repeated_long = 2;
+}
