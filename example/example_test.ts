@@ -28,13 +28,22 @@ const example: ExampleMessage = {
   myBool: true,
   myString: "testing",
   myBytes: new Uint8Array([1, 2, 3]),
-  myRepeatedFixed32: [1, 2, 3],
-  myRepeatedUint: [3, 2, 1],
-  myRepeatedLong: [
-    Long.fromValue(1, false),
-    Long.fromValue(2, false),
-    Long.fromValue(3, false),
-  ],
+
+  myRepeatedInt: [1, -1],
+  myRepeatedLong: [Long.fromValue(1), Long.fromValue(-1)],
+  myRepeatedUint: [1],
+  myRepeatedUlong: [Long.fromValue(1, false)],
+  myRepeatedSint: [1, -1],
+  myRepeatedSlong: [Long.fromValue(1), Long.fromValue(-1)],
+  myRepeatedFixed32: [1],
+  myRepeatedFixed64: [Long.fromValue(1)],
+  myRepeatedSfixed32: [1, -1],
+  myRepeatedSfixed64: [Long.fromValue(1), Long.fromValue(-1)],
+  myRepeatedFloat: [0.5],
+  myRepeatedDouble: [0.5],
+  myRepeatedBool: [true],
+  myRepeatedString: ["testing"],
+  myRepeatedBytes: [new Uint8Array([1, 2, 3])],
 };
 
 const encoded = ExampleMessage.encode(example).finish();

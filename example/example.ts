@@ -26,9 +26,21 @@ export interface ExampleMessage {
   myBool: boolean;
   myString: string;
   myBytes: Uint8Array;
-  myRepeatedFixed32: number[];
-  myRepeatedUint: number[];
+  myRepeatedInt: number[];
   myRepeatedLong: Long[];
+  myRepeatedUint: number[];
+  myRepeatedUlong: Long[];
+  myRepeatedSint: number[];
+  myRepeatedSlong: Long[];
+  myRepeatedFixed32: number[];
+  myRepeatedFixed64: Long[];
+  myRepeatedSfixed32: number[];
+  myRepeatedSfixed64: Long[];
+  myRepeatedFloat: number[];
+  myRepeatedDouble: number[];
+  myRepeatedBool: boolean[];
+  myRepeatedString: string[];
+  myRepeatedBytes: Uint8Array[];
 }
 
 function createBaseExampleMessage(): ExampleMessage {
@@ -54,16 +66,28 @@ function createBaseExampleMessage(): ExampleMessage {
     myBool: false,
     myString: "",
     myBytes: new Uint8Array(),
-    myRepeatedFixed32: [],
-    myRepeatedUint: [],
+    myRepeatedInt: [],
     myRepeatedLong: [],
+    myRepeatedUint: [],
+    myRepeatedUlong: [],
+    myRepeatedSint: [],
+    myRepeatedSlong: [],
+    myRepeatedFixed32: [],
+    myRepeatedFixed64: [],
+    myRepeatedSfixed32: [],
+    myRepeatedSfixed64: [],
+    myRepeatedFloat: [],
+    myRepeatedDouble: [],
+    myRepeatedBool: [],
+    myRepeatedString: [],
+    myRepeatedBytes: [],
   };
 }
 
 export const ExampleMessage = {
   encode(
     message: ExampleMessage,
-    writer: _m0.Writer = _m0.Writer.create(),
+    writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.myIntPos !== 0) {
       writer.uint32(8).int32(message.myIntPos);
@@ -128,28 +152,83 @@ export const ExampleMessage = {
     if (message.myBytes.length !== 0) {
       writer.uint32(170).bytes(message.myBytes);
     }
-    writer.uint32(178).fork();
-    for (const v of message.myRepeatedFixed32) {
-      writer.fixed32(v);
+    writer.uint32(258).fork();
+    for (const v of message.myRepeatedInt) {
+      writer.int32(v);
     }
     writer.ldelim();
-    writer.uint32(186).fork();
+    writer.uint32(274).fork();
+    for (const v of message.myRepeatedLong) {
+      writer.int64(v);
+    }
+    writer.ldelim();
+    writer.uint32(282).fork();
     for (const v of message.myRepeatedUint) {
       writer.uint32(v);
     }
     writer.ldelim();
-    writer.uint32(194).fork();
-    for (const v of message.myRepeatedLong) {
+    writer.uint32(290).fork();
+    for (const v of message.myRepeatedUlong) {
       writer.uint64(v);
     }
     writer.ldelim();
+    writer.uint32(306).fork();
+    for (const v of message.myRepeatedSint) {
+      writer.sint32(v);
+    }
+    writer.ldelim();
+    writer.uint32(322).fork();
+    for (const v of message.myRepeatedSlong) {
+      writer.sint64(v);
+    }
+    writer.ldelim();
+    writer.uint32(330).fork();
+    for (const v of message.myRepeatedFixed32) {
+      writer.fixed32(v);
+    }
+    writer.ldelim();
+    writer.uint32(338).fork();
+    for (const v of message.myRepeatedFixed64) {
+      writer.fixed64(v);
+    }
+    writer.ldelim();
+    writer.uint32(354).fork();
+    for (const v of message.myRepeatedSfixed32) {
+      writer.sfixed32(v);
+    }
+    writer.ldelim();
+    writer.uint32(370).fork();
+    for (const v of message.myRepeatedSfixed64) {
+      writer.sfixed64(v);
+    }
+    writer.ldelim();
+    writer.uint32(378).fork();
+    for (const v of message.myRepeatedFloat) {
+      writer.float(v);
+    }
+    writer.ldelim();
+    writer.uint32(386).fork();
+    for (const v of message.myRepeatedDouble) {
+      writer.double(v);
+    }
+    writer.ldelim();
+    writer.uint32(394).fork();
+    for (const v of message.myRepeatedBool) {
+      writer.bool(v);
+    }
+    writer.ldelim();
+    for (const v of message.myRepeatedString) {
+      writer.uint32(402).string(v!);
+    }
+    for (const v of message.myRepeatedBytes) {
+      writer.uint32(410).bytes(v!);
+    }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ExampleMessage {
-    const reader = input instanceof _m0.Reader
-      ? input
-      : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseExampleMessage();
     while (reader.pos < end) {
@@ -302,29 +381,45 @@ export const ExampleMessage = {
 
           message.myBytes = reader.bytes();
           continue;
-        case 22:
-          if (tag == 181) {
-            message.myRepeatedFixed32.push(reader.fixed32());
+        case 32:
+          if (tag == 256) {
+            message.myRepeatedInt.push(reader.int32());
             continue;
           }
 
-          if (tag == 178) {
+          if (tag == 258) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.myRepeatedFixed32.push(reader.fixed32());
+              message.myRepeatedInt.push(reader.int32());
             }
 
             continue;
           }
 
           break;
-        case 23:
-          if (tag == 184) {
+        case 34:
+          if (tag == 272) {
+            message.myRepeatedLong.push(reader.int64() as Long);
+            continue;
+          }
+
+          if (tag == 274) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedLong.push(reader.int64() as Long);
+            }
+
+            continue;
+          }
+
+          break;
+        case 35:
+          if (tag == 280) {
             message.myRepeatedUint.push(reader.uint32());
             continue;
           }
 
-          if (tag == 186) {
+          if (tag == 282) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
               message.myRepeatedUint.push(reader.uint32());
@@ -334,22 +429,180 @@ export const ExampleMessage = {
           }
 
           break;
-        case 24:
-          if (tag == 192) {
-            message.myRepeatedLong.push(reader.uint64() as Long);
+        case 36:
+          if (tag == 288) {
+            message.myRepeatedUlong.push(reader.uint64() as Long);
             continue;
           }
 
-          if (tag == 194) {
+          if (tag == 290) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.myRepeatedLong.push(reader.uint64() as Long);
+              message.myRepeatedUlong.push(reader.uint64() as Long);
             }
 
             continue;
           }
 
           break;
+        case 38:
+          if (tag == 304) {
+            message.myRepeatedSint.push(reader.sint32());
+            continue;
+          }
+
+          if (tag == 306) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedSint.push(reader.sint32());
+            }
+
+            continue;
+          }
+
+          break;
+        case 40:
+          if (tag == 320) {
+            message.myRepeatedSlong.push(reader.sint64() as Long);
+            continue;
+          }
+
+          if (tag == 322) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedSlong.push(reader.sint64() as Long);
+            }
+
+            continue;
+          }
+
+          break;
+        case 41:
+          if (tag == 333) {
+            message.myRepeatedFixed32.push(reader.fixed32());
+            continue;
+          }
+
+          if (tag == 330) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedFixed32.push(reader.fixed32());
+            }
+
+            continue;
+          }
+
+          break;
+        case 42:
+          if (tag == 337) {
+            message.myRepeatedFixed64.push(reader.fixed64() as Long);
+            continue;
+          }
+
+          if (tag == 338) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedFixed64.push(reader.fixed64() as Long);
+            }
+
+            continue;
+          }
+
+          break;
+        case 44:
+          if (tag == 357) {
+            message.myRepeatedSfixed32.push(reader.sfixed32());
+            continue;
+          }
+
+          if (tag == 354) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedSfixed32.push(reader.sfixed32());
+            }
+
+            continue;
+          }
+
+          break;
+        case 46:
+          if (tag == 369) {
+            message.myRepeatedSfixed64.push(reader.sfixed64() as Long);
+            continue;
+          }
+
+          if (tag == 370) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedSfixed64.push(reader.sfixed64() as Long);
+            }
+
+            continue;
+          }
+
+          break;
+        case 47:
+          if (tag == 381) {
+            message.myRepeatedFloat.push(reader.float());
+            continue;
+          }
+
+          if (tag == 378) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedFloat.push(reader.float());
+            }
+
+            continue;
+          }
+
+          break;
+        case 48:
+          if (tag == 385) {
+            message.myRepeatedDouble.push(reader.double());
+            continue;
+          }
+
+          if (tag == 386) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedDouble.push(reader.double());
+            }
+
+            continue;
+          }
+
+          break;
+        case 49:
+          if (tag == 392) {
+            message.myRepeatedBool.push(reader.bool());
+            continue;
+          }
+
+          if (tag == 394) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.myRepeatedBool.push(reader.bool());
+            }
+
+            continue;
+          }
+
+          break;
+        case 50:
+          if (tag != 402) {
+            break;
+          }
+
+          message.myRepeatedString.push(reader.string());
+          continue;
+        case 51:
+          if (tag != 410) {
+            break;
+          }
+
+          message.myRepeatedBytes.push(reader.bytes());
+          continue;
       }
       if ((tag & 7) == 4 || tag == 0) {
         break;
@@ -404,14 +657,50 @@ export const ExampleMessage = {
       myBytes: isSet(object.myBytes)
         ? bytesFromBase64(object.myBytes)
         : new Uint8Array(),
-      myRepeatedFixed32: Array.isArray(object?.myRepeatedFixed32)
-        ? object.myRepeatedFixed32.map((e: any) => Number(e))
+      myRepeatedInt: Array.isArray(object?.myRepeatedInt)
+        ? object.myRepeatedInt.map((e: any) => Number(e))
+        : [],
+      myRepeatedLong: Array.isArray(object?.myRepeatedLong)
+        ? object.myRepeatedLong.map((e: any) => Long.fromValue(e))
         : [],
       myRepeatedUint: Array.isArray(object?.myRepeatedUint)
         ? object.myRepeatedUint.map((e: any) => Number(e))
         : [],
-      myRepeatedLong: Array.isArray(object?.myRepeatedLong)
-        ? object.myRepeatedLong.map((e: any) => Long.fromValue(e))
+      myRepeatedUlong: Array.isArray(object?.myRepeatedUlong)
+        ? object.myRepeatedUlong.map((e: any) => Long.fromValue(e))
+        : [],
+      myRepeatedSint: Array.isArray(object?.myRepeatedSint)
+        ? object.myRepeatedSint.map((e: any) => Number(e))
+        : [],
+      myRepeatedSlong: Array.isArray(object?.myRepeatedSlong)
+        ? object.myRepeatedSlong.map((e: any) => Long.fromValue(e))
+        : [],
+      myRepeatedFixed32: Array.isArray(object?.myRepeatedFixed32)
+        ? object.myRepeatedFixed32.map((e: any) => Number(e))
+        : [],
+      myRepeatedFixed64: Array.isArray(object?.myRepeatedFixed64)
+        ? object.myRepeatedFixed64.map((e: any) => Long.fromValue(e))
+        : [],
+      myRepeatedSfixed32: Array.isArray(object?.myRepeatedSfixed32)
+        ? object.myRepeatedSfixed32.map((e: any) => Number(e))
+        : [],
+      myRepeatedSfixed64: Array.isArray(object?.myRepeatedSfixed64)
+        ? object.myRepeatedSfixed64.map((e: any) => Long.fromValue(e))
+        : [],
+      myRepeatedFloat: Array.isArray(object?.myRepeatedFloat)
+        ? object.myRepeatedFloat.map((e: any) => Number(e))
+        : [],
+      myRepeatedDouble: Array.isArray(object?.myRepeatedDouble)
+        ? object.myRepeatedDouble.map((e: any) => Number(e))
+        : [],
+      myRepeatedBool: Array.isArray(object?.myRepeatedBool)
+        ? object.myRepeatedBool.map((e: any) => Boolean(e))
+        : [],
+      myRepeatedString: Array.isArray(object?.myRepeatedString)
+        ? object.myRepeatedString.map((e: any) => String(e))
+        : [],
+      myRepeatedBytes: Array.isArray(object?.myRepeatedBytes)
+        ? object.myRepeatedBytes.map((e: any) => bytesFromBase64(e))
         : [],
     };
   },
@@ -455,8 +744,44 @@ export const ExampleMessage = {
     message.myString !== undefined && (obj.myString = message.myString);
     message.myBytes !== undefined &&
       (obj.myBytes = base64FromBytes(
-        message.myBytes !== undefined ? message.myBytes : new Uint8Array(),
+        message.myBytes !== undefined ? message.myBytes : new Uint8Array()
       ));
+    if (message.myRepeatedInt) {
+      obj.myRepeatedInt = message.myRepeatedInt.map((e) => Math.round(e));
+    } else {
+      obj.myRepeatedInt = [];
+    }
+    if (message.myRepeatedLong) {
+      obj.myRepeatedLong = message.myRepeatedLong.map((e) =>
+        (e || Long.ZERO).toString()
+      );
+    } else {
+      obj.myRepeatedLong = [];
+    }
+    if (message.myRepeatedUint) {
+      obj.myRepeatedUint = message.myRepeatedUint.map((e) => Math.round(e));
+    } else {
+      obj.myRepeatedUint = [];
+    }
+    if (message.myRepeatedUlong) {
+      obj.myRepeatedUlong = message.myRepeatedUlong.map((e) =>
+        (e || Long.UZERO).toString()
+      );
+    } else {
+      obj.myRepeatedUlong = [];
+    }
+    if (message.myRepeatedSint) {
+      obj.myRepeatedSint = message.myRepeatedSint.map((e) => Math.round(e));
+    } else {
+      obj.myRepeatedSint = [];
+    }
+    if (message.myRepeatedSlong) {
+      obj.myRepeatedSlong = message.myRepeatedSlong.map((e) =>
+        (e || Long.ZERO).toString()
+      );
+    } else {
+      obj.myRepeatedSlong = [];
+    }
     if (message.myRepeatedFixed32) {
       obj.myRepeatedFixed32 = message.myRepeatedFixed32.map((e) =>
         Math.round(e)
@@ -464,29 +789,65 @@ export const ExampleMessage = {
     } else {
       obj.myRepeatedFixed32 = [];
     }
-    if (message.myRepeatedUint) {
-      obj.myRepeatedUint = message.myRepeatedUint.map((e) => Math.round(e));
-    } else {
-      obj.myRepeatedUint = [];
-    }
-    if (message.myRepeatedLong) {
-      obj.myRepeatedLong = message.myRepeatedLong.map((e) =>
+    if (message.myRepeatedFixed64) {
+      obj.myRepeatedFixed64 = message.myRepeatedFixed64.map((e) =>
         (e || Long.UZERO).toString()
       );
     } else {
-      obj.myRepeatedLong = [];
+      obj.myRepeatedFixed64 = [];
+    }
+    if (message.myRepeatedSfixed32) {
+      obj.myRepeatedSfixed32 = message.myRepeatedSfixed32.map((e) =>
+        Math.round(e)
+      );
+    } else {
+      obj.myRepeatedSfixed32 = [];
+    }
+    if (message.myRepeatedSfixed64) {
+      obj.myRepeatedSfixed64 = message.myRepeatedSfixed64.map((e) =>
+        (e || Long.ZERO).toString()
+      );
+    } else {
+      obj.myRepeatedSfixed64 = [];
+    }
+    if (message.myRepeatedFloat) {
+      obj.myRepeatedFloat = message.myRepeatedFloat.map((e) => e);
+    } else {
+      obj.myRepeatedFloat = [];
+    }
+    if (message.myRepeatedDouble) {
+      obj.myRepeatedDouble = message.myRepeatedDouble.map((e) => e);
+    } else {
+      obj.myRepeatedDouble = [];
+    }
+    if (message.myRepeatedBool) {
+      obj.myRepeatedBool = message.myRepeatedBool.map((e) => e);
+    } else {
+      obj.myRepeatedBool = [];
+    }
+    if (message.myRepeatedString) {
+      obj.myRepeatedString = message.myRepeatedString.map((e) => e);
+    } else {
+      obj.myRepeatedString = [];
+    }
+    if (message.myRepeatedBytes) {
+      obj.myRepeatedBytes = message.myRepeatedBytes.map((e) =>
+        base64FromBytes(e !== undefined ? e : new Uint8Array())
+      );
+    } else {
+      obj.myRepeatedBytes = [];
     }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<ExampleMessage>, I>>(
-    base?: I,
+    base?: I
   ): ExampleMessage {
     return ExampleMessage.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<ExampleMessage>, I>>(
-    object: I,
+    object: I
   ): ExampleMessage {
     const message = createBaseExampleMessage();
     message.myIntPos = object.myIntPos ?? 0;
@@ -500,9 +861,10 @@ export const ExampleMessage = {
         ? Long.fromValue(object.myLongNeg)
         : Long.ZERO;
     message.myUint = object.myUint ?? 0;
-    message.myUlong = object.myUlong !== undefined && object.myUlong !== null
-      ? Long.fromValue(object.myUlong)
-      : Long.UZERO;
+    message.myUlong =
+      object.myUlong !== undefined && object.myUlong !== null
+        ? Long.fromValue(object.myUlong)
+        : Long.UZERO;
     message.mySintPos = object.mySintPos ?? 0;
     message.mySintNeg = object.mySintNeg ?? 0;
     message.mySlongPos =
@@ -533,10 +895,26 @@ export const ExampleMessage = {
     message.myBool = object.myBool ?? false;
     message.myString = object.myString ?? "";
     message.myBytes = object.myBytes ?? new Uint8Array();
-    message.myRepeatedFixed32 = object.myRepeatedFixed32?.map((e) => e) || [];
-    message.myRepeatedUint = object.myRepeatedUint?.map((e) => e) || [];
+    message.myRepeatedInt = object.myRepeatedInt?.map((e) => e) || [];
     message.myRepeatedLong =
       object.myRepeatedLong?.map((e) => Long.fromValue(e)) || [];
+    message.myRepeatedUint = object.myRepeatedUint?.map((e) => e) || [];
+    message.myRepeatedUlong =
+      object.myRepeatedUlong?.map((e) => Long.fromValue(e)) || [];
+    message.myRepeatedSint = object.myRepeatedSint?.map((e) => e) || [];
+    message.myRepeatedSlong =
+      object.myRepeatedSlong?.map((e) => Long.fromValue(e)) || [];
+    message.myRepeatedFixed32 = object.myRepeatedFixed32?.map((e) => e) || [];
+    message.myRepeatedFixed64 =
+      object.myRepeatedFixed64?.map((e) => Long.fromValue(e)) || [];
+    message.myRepeatedSfixed32 = object.myRepeatedSfixed32?.map((e) => e) || [];
+    message.myRepeatedSfixed64 =
+      object.myRepeatedSfixed64?.map((e) => Long.fromValue(e)) || [];
+    message.myRepeatedFloat = object.myRepeatedFloat?.map((e) => e) || [];
+    message.myRepeatedDouble = object.myRepeatedDouble?.map((e) => e) || [];
+    message.myRepeatedBool = object.myRepeatedBool?.map((e) => e) || [];
+    message.myRepeatedString = object.myRepeatedString?.map((e) => e) || [];
+    message.myRepeatedBytes = object.myRepeatedBytes?.map((e) => e) || [];
     return message;
   },
 };
@@ -594,19 +972,22 @@ type Builtin =
   | boolean
   | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long
-  : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : 
-    & P
-    & { [K in keyof P]: Exact<P[K], I[K]> }
-    & {
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
       [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
     };
 

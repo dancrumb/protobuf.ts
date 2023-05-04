@@ -22,7 +22,20 @@ message ExampleMessage {
   bool my_bool = 19;
   string my_string = 20;
   bytes my_bytes = 21;
-  repeated fixed32 my_repeated_fixed32 = 22;
-  repeated uint32 my_repeated_uint = 23;
-  repeated uint64 my_repeated_long = 2;
+
+  repeated int32 my_repeated_int = 32;
+  repeated int64 my_repeated_long = 34;
+  repeated uint32 my_repeated_uint = 35;
+  repeated uint64 my_repeated_ulong = 36;
+  repeated sint32 my_repeated_sint = 38;
+  repeated sint64 my_repeated_slong = 40;
+  repeated fixed32 my_repeated_fixed32 = 41;
+  repeated fixed64 my_repeated_fixed64 = 42;
+  repeated sfixed32 my_repeated_sfixed32 = 44;
+  repeated sfixed64 my_repeated_sfixed64 = 46;
+  repeated float my_repeated_float = 47;
+  repeated double my_repeated_double = 48;
+  repeated bool my_repeated_bool = 49;
+  repeated string my_repeated_string = 50;
+  repeated bytes my_repeated_bytes = 51;
 }
